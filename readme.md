@@ -10,3 +10,7 @@ https://pypi.org/project/progress/
 Parallel processing
 
 https://httpd.apache.org/docs/2.4/logs.html
+
+## LICENSE
+
+[ECL Version 2.0](https://opensource.org/licenses/ECL-2.0)
