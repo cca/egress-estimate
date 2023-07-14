@@ -1,5 +1,7 @@
 #!/usr/bin/env python
+import csv
 from multiprocessing import Pool, Manager
+import sys
 import time
 
 # https://pypi.org/project/apachelogs/
@@ -34,13 +36,22 @@ def init_pool(d):
     data = d
 
 
+def write_csv(data):
+    writer = csv.writer(sys.stdout, delimiter='\t')
+    writer.writerow(('Month', 'Bytes'))
+    # sort data
+    for key, value in sorted(data.items()):
+        writer.writerow([key, value])
+
+
 def main(files):
+    # processes do not share global state which is why we need to jump through
+    # hoops here to get a global dict
     with Manager() as manager:
         data = manager.dict()
         with Pool(initializer=init_pool, initargs=(data,)) as pool:
             pool.map(parse_file, files)
-        # @TODO output format(s), probably CSV is best
-        print(data)
+        write_csv(data)
 
 
 if __name__ == '__main__':
